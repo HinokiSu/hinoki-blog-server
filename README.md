@@ -1,4 +1,4 @@
-<p align="center" style="font-size:px;">
+<p align="center" style="font-size:36px;">
   Hinoki's Blog Server
 </p>
 
