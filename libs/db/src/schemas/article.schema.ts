@@ -23,6 +23,9 @@ export const ArticleSchema = new Schema(
   {
     title: String,
     author: String,
+    category: String,
+    content: String, // 解析后的.md-> .html
+    content_md: String, // markdonw源文件
   },
   {
     versionKey: false,
