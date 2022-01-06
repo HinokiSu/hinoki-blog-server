@@ -15,4 +15,28 @@ export class CreateArticleDto {
   @IsNotEmpty()
   @IsString()
   readonly author: string
+
+  @ApiProperty({
+    example: 'nestJs',
+    description: '文章类别Id',
+  })
+  @IsNotEmpty()
+  @IsString()
+  readonly cate_id: string
+
+  @ApiProperty({
+    example: '*/path/*.html',
+    description: '文章解析后的html',
+  })
+  @IsNotEmpty()
+  @IsString()
+  readonly content: string
+
+  @ApiProperty({
+    example: '*/path/*.md',
+    description: '文章markdown文件源',
+  })
+  @IsNotEmpty()
+  @IsString()
+  readonly content_md: string
 }
