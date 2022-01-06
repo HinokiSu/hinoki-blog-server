@@ -1,6 +1,6 @@
-import { CreateArticleDto } from '@libs/db/dto/create-article.dto'
-import { UpdateArticleDto } from '@libs/db/dto/update-article.dto'
-import { ArticleDocument } from '@libs/db/interfaces/article.interfaces'
+import { CreateArticleDto } from '@libs/db/dto/article/create-article.dto'
+import { UpdateArticleDto } from '@libs/db/dto/article/update-article.dto'
+import { ArticleDocument } from '@libs/db/interfaces/article.interface'
 import { Inject, Injectable } from '@nestjs/common'
 import { Model } from 'mongoose'
 import { ARTICLE_MODEL } from '../constants/module.constant'
@@ -33,7 +33,7 @@ export class ArticleService {
 
   // 更新文章
   async updateByArticleId(articleId: string, article: UpdateArticleDto): Promise<ArticleDocument> {
-    return await this.ArticleModel.findByIdAndUpdate(articleId, article, {
+    return await this.ArticleModel.findByIdAndUpdate({ _id: articleId }, article, {
       new: true,
     })
   }

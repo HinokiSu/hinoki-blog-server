@@ -1,17 +1,6 @@
-import { CreateArticleDto } from '@libs/db/dto/create-article.dto'
-import { UpdateArticleDto } from '@libs/db/dto/update-article.dto'
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpStatus,
-  Param,
-  Post,
-  Put,
-  Req,
-  Res,
-} from '@nestjs/common'
+import { CreateArticleDto } from '@libs/db/dto/article/create-article.dto'
+import { UpdateArticleDto } from '@libs/db/dto/article/update-article.dto'
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Res } from '@nestjs/common'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import { ArticleService } from './article.service'
 
@@ -30,7 +19,7 @@ export class ArticleController {
   }
 
   // 获取所有文章
-  @Get('/all')
+  @Get('/articles')
   @ApiResponse({
     status: 200,
     description: '已获取所有文章',
@@ -43,12 +32,12 @@ export class ArticleController {
   }
 
   // 根据 articleId 获取文章
-  @Get('/:articleId')
+  @Get('/:id')
   @ApiResponse({
     status: 200,
     description: '获取到指定文章',
   })
-  async findByArticleId(@Res() res: any, @Param('articleId') articleId: string) {
+  async findByArticleId(@Res() res: any, @Param('id') articleId: string) {
     const article = await this.articleService.readByArticleId(articleId)
     return res.status(HttpStatus.OK).json({
       article,
@@ -56,27 +45,27 @@ export class ArticleController {
   }
 
   // 根据 articleId 更新文章
-  @Put('/:articleId')
+  @Put('/:id')
   @ApiResponse({
     status: 200,
-    description: '获取到指定文章',
+    description: '获取指定文章',
   })
   async updateByArticleId(
-    @Param('articleId') articleId: string,
-    @Body() updateArticle: UpdateArticleDto,
+    @Param('id') articleId: string,
+    @Body() updateArticleDto: UpdateArticleDto,
     @Res() res: any,
   ) {
-    const article = await this.articleService.updateByArticleId(articleId, updateArticle)
+    const article = await this.articleService.updateByArticleId(articleId, updateArticleDto)
     return res.status(HttpStatus.OK).json(article)
   }
 
   // 根据 articleId 删除文章
-  @Delete('/:articleId')
+  @Delete('/:id')
   @ApiResponse({
     status: 200,
     description: '删除指定文章',
   })
-  async deleteByArticleId(@Param('articleId') articleId: string, @Res() res: any) {
+  async deleteByArticleId(@Param('id') articleId: string, @Res() res: any) {
     const result = await this.articleService.deleteByArticleId(articleId)
     return res.status(HttpStatus.OK).json(result)
   }
