@@ -10,7 +10,7 @@ export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
   // 创建文章
-  @Post('/create')
+  @Post('/new')
   async createArticle(@Res() res, @Body() article: CreateArticleDto) {
     const newArticle = await this.articleService.create(article)
     return res.status(HttpStatus.CREATED).json({
@@ -19,7 +19,7 @@ export class ArticleController {
   }
 
   // 获取所有文章
-  @Get('/articles')
+  @Get('/')
   @ApiResponse({
     status: 200,
     description: '已获取所有文章',

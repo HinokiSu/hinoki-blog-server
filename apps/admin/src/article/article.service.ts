@@ -18,7 +18,7 @@ export class ArticleService {
   // 创建
   async create(article: CreateArticleDto): Promise<ArticleDocument> {
     const newArticle = new this.ArticleModel(article)
-    return newArticle.save()
+    return await newArticle.save()
   }
 
   // 读取已有所有文章
