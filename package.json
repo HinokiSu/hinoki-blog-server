@@ -28,6 +28,7 @@
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/swagger": "^5.1.5",
     "@nestjsx/crud": "^5.0.0-alpha.3",
+    "moment": "^2.29.1",
     "mongoose": "^6.1.4",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
@@ -81,7 +82,8 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@libs/db(|/.*)$": "<rootDir>/libs/db/src/$1"
+      "^@libs/db(|/.*)$": "<rootDir>/libs/db/src/$1",
+      "^@libs/utils(|/.*)$": "<rootDir>/libs/utils/src/$1"
     }
   }
 }
