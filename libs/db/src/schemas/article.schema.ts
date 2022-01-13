@@ -1,39 +1,32 @@
-/*
-// TODO: 优化 nestjs/mongoose写法
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-
-@Schema()
-export class Article {
-  @Prop()
-  title: string
-
-  @Prop()
-  author: string
-
-  @Prop()
-  date: string
-}
-
-export const ArticleSchema = SchemaFactory.createForClass(Article)
- */
-
 import { Schema } from 'mongoose'
-
+import { dateFormat } from '@libs/utils/format'
 export const ArticleSchema = new Schema(
   {
-    title: String,
-    author: String,
-    category: String,
-    content: String, // 解析后的.md-> .html
-    content_md: String, // markdonw源文件
+    title: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+    },
+    markdown: {
+      type: String,
+      required: true,
+    },
+    html: {
+      type: String,
+      required: true,
+    },
+    createdAt: {
+      type: String,
+      default: dateFormat(new Date(), 'YYYY-MM-DD hh:mm:ss'),
+    },
+    updatedAt: {
+      type: String,
+      default: dateFormat(new Date(), 'YYYY-MM-DD hh:mm:ss'),
+    },
   },
   {
     versionKey: false,
-    // 自动添加时间戳， createdAt, updatedAt 字段
-    timestamps: {
-      // 重新命名
-      createdAt: 'created_At',
-      updatedAt: 'updated_At',
-    },
   },
 )
