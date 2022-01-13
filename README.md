@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="120" alt="Nest Logo" valign="middle"/></a> &nbsp;&nbsp;
-  <a href="http://nestjs.com/" target="blank"><img src="https://webimages.mongodb.com/_com_assets/cms/kuyjf3vea2hg34taa-horizontal_default_slate_blue.svg?auto=format%252Ccompress"  width="150" alt="mongo Logo" valign="middle" /></a>
+  <a href="https://www.mongodb.com/" target="blank"><img src="https://webimages.mongodb.com/_com_assets/cms/kuyjf3vea2hg34taa-horizontal_default_slate_blue.svg?auto=format%252Ccompress"  width="150" alt="mongo Logo" valign="middle" /></a>
 </p>
 
 # Description
