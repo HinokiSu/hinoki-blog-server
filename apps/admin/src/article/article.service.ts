@@ -28,7 +28,7 @@ export class ArticleService {
 
   // 根据文章Id 获取
   async readByArticleId(articleId: string): Promise<ArticleDocument> {
-    return await this.ArticleModel.findById({ _id: articleId }).exec()
+    return await this.ArticleModel.findOne({ _id: articleId }).exec()
   }
 
   // 更新文章
