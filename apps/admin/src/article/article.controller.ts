@@ -66,7 +66,6 @@ export class ArticleController {
   })
   async findByArticleId(@Res() res: any, @Param('id') articleId: string) {
     try {
-      console.log('id: ', articleId)
       const article = await this.articleService.readByArticleId(articleId)
       return res.json({
         article,

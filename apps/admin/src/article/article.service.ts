@@ -2,7 +2,7 @@ import { CreateArticleDto } from '@libs/db/dto/article/create-article.dto'
 import { UpdateArticleDto } from '@libs/db/dto/article/update-article.dto'
 import { ArticleDocument } from '@libs/db/interfaces/article.interface'
 import { Inject, Injectable } from '@nestjs/common'
-import { Model } from 'mongoose'
+import { Model, Types } from 'mongoose'
 import { ARTICLE_MODEL } from '../constants/module.constant'
 
 @Injectable()
@@ -14,31 +14,61 @@ export class ArticleService {
     private ArticleModel: Model<ArticleDocument>,
   ) {}
 
-  // 基本方法
-  // 创建
   async create(article: CreateArticleDto): Promise<ArticleDocument> {
     const newArticle = new this.ArticleModel(article)
     return await newArticle.save()
   }
 
-  // 读取已有所有文章
   async readAll(): Promise<ArticleDocument[]> {
-    return await this.ArticleModel.find({}).exec()
+    return await this.ArticleModel.aggregate([
+      {
+        $lookup: {
+          from: 'category',
+          localField: 'classification',
+          foreignField: '_id',
+          as: 'classification',
+        },
+      },
+      {
+        $project: {
+          'classification.createdAt': 0,
+          'classification.updatedAt': 0,
+        },
+      },
+    ])
   }
 
-  // 根据文章Id 获取
-  async readByArticleId(articleId: string): Promise<ArticleDocument> {
-    return await this.ArticleModel.findOne({ _id: articleId }).exec()
+  async readByArticleId(articleId: string): Promise<ArticleDocument[]> {
+    return await this.ArticleModel.aggregate([
+      {
+        $match: {
+          // if no `new Types.ObjectId()`,it will not work
+          _id: new Types.ObjectId(articleId),
+        },
+      },
+      {
+        $lookup: {
+          from: 'category',
+          localField: 'classification',
+          foreignField: '_id',
+          as: 'classification',
+        },
+      },
+      {
+        $project: {
+          'classification.createdAt': 0,
+          'classification.updatedAt': 0,
+        },
+      },
+    ])
   }
 
-  // 更新文章
   async updateByArticleId(articleId: string, article: UpdateArticleDto): Promise<ArticleDocument> {
     return await this.ArticleModel.findByIdAndUpdate({ _id: articleId }, article, {
       new: true,
     })
   }
 
-  // 删除
   async deleteByArticleId(articleId: string): Promise<any> {
     return await this.ArticleModel.findByIdAndRemove(articleId)
   }
