@@ -1,6 +1,18 @@
 import { CreateCategoryDto } from '@libs/db/dto/category/create-category.dto'
 import { UpdateCategoryDto } from '@libs/db/dto/category/update-category.dto'
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Res } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  NotFoundException,
+  Param,
+  Post,
+  Put,
+  Res,
+} from '@nestjs/common'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import { CategoryService } from './category.service'
 
@@ -14,10 +26,16 @@ export class CategoryController {
     status: 200,
     description: '创建文章类别',
   })
-  @Post('/create')
+  @Post('/new')
+  @HttpCode(HttpStatus.CREATED)
   async createCategory(@Res() res: any, @Body() category: CreateCategoryDto) {
-    const newCategory = await this.categoryService.createCategory(category)
-    return res.status(HttpStatus.OK).json(newCategory)
+    try {
+      const newCategory = await this.categoryService.createCategory(category)
+      return res.json(newCategory)
+    } catch (err) {
+      console.log('[Category] Error: : ', err)
+      throw new NotFoundException(`Get all articles failed`)
+    }
   }
 
   // 获取所有类别
@@ -25,10 +43,18 @@ export class CategoryController {
     status: 200,
     description: '获取所有文章类别',
   })
-  @Get('/categories')
+  @Get('/all')
+  @HttpCode(HttpStatus.OK)
   async findAllCategory(@Res() res: any) {
-    const categories = await this.categoryService.readAllCategory()
-    return res.status(HttpStatus.OK).json(categories)
+    try {
+      const categories = await this.categoryService.readAllCategory()
+      return res.json({
+        categories,
+      })
+    } catch (err) {
+      console.log('[Category] Error: : ', err)
+      throw new NotFoundException(`Get all categories failed`)
+    }
   }
 
   // 根据Id 获取类别
@@ -37,9 +63,15 @@ export class CategoryController {
     description: '获取指定文章类别',
   })
   @Get('/:id')
+  @HttpCode(HttpStatus.OK)
   async findCategoryById(@Res() res: any, @Param('id') cateId: string) {
-    const category = await this.categoryService.readCategoryById(cateId)
-    return res.status(HttpStatus.OK).json(category)
+    try {
+      const category = await this.categoryService.readCategoryById(cateId)
+      return res.json(category)
+    } catch (err) {
+      console.log('[Category] Error: : ', err)
+      throw new NotFoundException(`Get category #${cateId} failed`)
+    }
   }
 
   // 更新类别
@@ -48,13 +80,22 @@ export class CategoryController {
     description: '更新指定的文章类别',
   })
   @Put('/:id')
+  @HttpCode(HttpStatus.OK)
   async updateyCategory(
     @Res() res: any,
     @Param('id') cateId: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    const category = this.categoryService.updateCategory(cateId, updateCategoryDto)
-    return res.status(HttpStatus.OK).json(category)
+    try {
+      const category = await this.categoryService.updateCategory(cateId, updateCategoryDto)
+      return res.json({
+        message: 'Category has been updated successfully',
+        category,
+      })
+    } catch (err) {
+      console.log('[Category] Error: : ', err)
+      throw new NotFoundException(`Update category failed`)
+    }
   }
 
   // 删除类别
@@ -64,7 +105,15 @@ export class CategoryController {
   })
   @Delete('/:id')
   async deleteCategory(@Res() res: any, @Param('id') cateId: string) {
-    const result = this.categoryService.deleteCategory(cateId)
-    return res.status(HttpStatus.OK).json(result)
+    try {
+      const result = await this.categoryService.deleteCategory(cateId)
+      return res.json({
+        message: 'Category has been deleted',
+        result,
+      })
+    } catch (err) {
+      console.log('[Category] Error: : ', err)
+      throw new NotFoundException(`Delete caregory failed`)
+    }
   }
 }
