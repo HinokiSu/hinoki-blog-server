@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsNotEmpty, IsString } from 'class-validator'
 
-// 请求有效载荷
 export class CreateCategoryDto {
   @ApiProperty({
     example: 'NestJs',
@@ -10,4 +9,19 @@ export class CreateCategoryDto {
   @IsNotEmpty()
   @IsString()
   readonly name: string
+  @ApiProperty({
+    example: '2022-1-19 16:10:21',
+    description: '类别创建的时间',
+  })
+  @IsNotEmpty()
+  @IsString()
+  readonly createAt: string
+
+  @ApiProperty({
+    example: '2022-1-19 16:10:21',
+    description: '类别更新的时间',
+  })
+  @IsNotEmpty()
+  @IsString()
+  readonly updateAt: string
 }
