@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose'
-import { dateFormat } from '@libs/utils/format'
+import { nowDateFormat } from '@libs/utils/format'
 export const ArticleSchema = new Schema(
   {
     title: {
@@ -9,6 +9,11 @@ export const ArticleSchema = new Schema(
     description: {
       type: String,
     },
+
+    classification: {
+      type: Array,
+      default: [],
+    },
     markdown: {
       type: String,
       required: true,
@@ -17,13 +22,17 @@ export const ArticleSchema = new Schema(
       type: String,
       required: true,
     },
+    isVisible: {
+      type: String,
+      default: 'true',
+    },
     createdAt: {
       type: String,
-      default: dateFormat(new Date(), 'YYYY-MM-DD hh:mm:ss'),
+      default: nowDateFormat('YYYY-MM-DD hh:mm:ss'),
     },
     updatedAt: {
       type: String,
-      default: dateFormat(new Date(), 'YYYY-MM-DD hh:mm:ss'),
+      default: nowDateFormat('YYYY-MM-DD hh:mm:ss'),
     },
   },
   {

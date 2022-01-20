@@ -20,6 +20,13 @@ export class CreateArticleDto {
   readonly description: string
 
   @ApiProperty({
+    example: 'NestJs',
+    description: '类别',
+  })
+  @IsString()
+  readonly classification: string
+
+  @ApiProperty({
     example: '# Nestjs...',
     description: 'markdown源文件',
   })
@@ -34,6 +41,14 @@ export class CreateArticleDto {
   @IsNotEmpty()
   @IsString()
   readonly html: string
+
+  @ApiProperty({
+    example: 'true',
+    description: '文章是否可见',
+  })
+  @IsNotEmpty()
+  @IsString()
+  readonly isVisible: string
 
   @ApiProperty({
     example: '2022-1-1 21:00',
