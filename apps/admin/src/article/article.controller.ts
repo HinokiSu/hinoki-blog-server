@@ -17,12 +17,16 @@ import {
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import { ArticleService } from './article.service'
 
-@Controller('article')
-@ApiTags('Article')
+@Controller('admin/article')
+@ApiTags('Admin-Article')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
   // 创建文章
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: '创建文章成功',
+  })
   @Post('/new')
   @HttpCode(HttpStatus.CREATED)
   async createArticle(@Res() res: any, @Body() article: CreateArticleDto) {
