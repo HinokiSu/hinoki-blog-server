@@ -16,8 +16,8 @@ import {
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import { CategoryService } from './category.service'
 
-@ApiTags('Category')
-@Controller('category')
+@ApiTags('Admin-Category')
+@Controller('admin/category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 

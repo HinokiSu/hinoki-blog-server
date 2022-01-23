@@ -22,17 +22,16 @@ export class ArticleService {
   async readAll(): Promise<ArticleDocument[]> {
     return await this.ArticleModel.aggregate([
       {
-        $lookup: {
-          from: 'category',
-          localField: 'classification',
-          foreignField: '_id',
-          as: 'classification',
-        },
-      },
-      {
-        $project: {
-          'classification.createdAt': 0,
-          'classification.updatedAt': 0,
+        $addFields: {
+          classification: {
+            $map: {
+              input: '$classification',
+              as: 'cate',
+              in: {
+                $toObjectId: '$$cate',
+              },
+            },
+          },
         },
       },
     ])
@@ -47,17 +46,16 @@ export class ArticleService {
         },
       },
       {
-        $lookup: {
-          from: 'category',
-          localField: 'classification',
-          foreignField: '_id',
-          as: 'classification',
-        },
-      },
-      {
-        $project: {
-          'classification.createdAt': 0,
-          'classification.updatedAt': 0,
+        $addFields: {
+          classification: {
+            $map: {
+              input: '$classification',
+              as: 'cate',
+              in: {
+                $toObjectId: '$$cate',
+              },
+            },
+          },
         },
       },
     ])
