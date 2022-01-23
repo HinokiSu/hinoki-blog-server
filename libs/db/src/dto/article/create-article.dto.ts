@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNotEmpty, IsString } from 'class-validator'
+import { IsNotEmpty, IsString, IsArray } from 'class-validator'
 
-// 请求有效载荷
 export class CreateArticleDto {
   @ApiProperty({
     example: '如何使用nestJs',
@@ -20,11 +19,11 @@ export class CreateArticleDto {
   readonly description: string
 
   @ApiProperty({
-    example: 'NestJs',
+    example: [{ _id: '61ea88e24d878e334be0669c' }],
     description: '类别',
   })
-  @IsString()
-  readonly classification: string
+  @IsArray()
+  readonly classification: Array<string>
 
   @ApiProperty({
     example: '# Nestjs...',
