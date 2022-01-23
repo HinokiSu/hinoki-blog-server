@@ -13,17 +13,15 @@ export class ArticlesService {
   async findAll(): Promise<ArticleDocument[]> {
     return await this.ArticlesModel.aggregate([
       {
-        $lookup: {
-          from: 'category',
-          localField: 'classification',
-          foreignField: '_id',
-          as: 'classification',
+        $match: {
+          isVisible: '1',
         },
       },
       {
         $project: {
-          'classification.createdAt': 0,
-          'classification.updatedAt': 0,
+          markdown: 0,
+          createdAt: 0,
+          isVisible: 0,
         },
       },
     ])

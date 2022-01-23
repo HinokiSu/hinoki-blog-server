@@ -3,7 +3,7 @@ import { ApiBasicAuth } from '@nestjs/swagger'
 import { ArticlesService } from './articles.service'
 
 @ApiBasicAuth('Server-Article')
-@Controller('articles')
+@Controller('article')
 export class ArticlesController {
   constructor(private readonly articlesService: ArticlesService) {}
 
