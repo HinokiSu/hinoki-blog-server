@@ -126,4 +126,21 @@ export class ArticleController {
       throw new NotFoundException(`Article #${articleId} not found`)
     }
   }
+
+  @Delete('/category/:cid')
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: '删除含有该categoryId的所有文章classification',
+  })
+  async deleteCategoryByArId(@Param('cid') cateId: string, @Res() res: any) {
+    try {
+      const article = await this.articleService.deleteAllArticleByCategory(cateId)
+      return res.json({
+        message: 'ok',
+        article,
+      })
+    } catch (error) {
+      throw new NotFoundException(`Article Category #${cateId} not found`)
+    }
+  }
 }

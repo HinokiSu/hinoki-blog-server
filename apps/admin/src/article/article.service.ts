@@ -70,4 +70,15 @@ export class ArticleService {
   async deleteByArticleId(articleId: string): Promise<any> {
     return await this.ArticleModel.findByIdAndRemove(articleId)
   }
+
+  async deleteAllArticleByCategory(cateId: string): Promise<any> {
+    return await this.ArticleModel.updateMany(
+      { classification: cateId },
+      {
+        $pull: {
+          classification: cateId,
+        },
+      },
+    )
+  }
 }
