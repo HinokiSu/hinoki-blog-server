@@ -19,7 +19,7 @@ export class CreateArticleDto {
   readonly description: string
 
   @ApiProperty({
-    example: [{ _id: '61ea88e24d878e334be0669c' }],
+    example: ['620c972261f9338d6265074a'],
     description: '类别',
   })
   @IsArray()
