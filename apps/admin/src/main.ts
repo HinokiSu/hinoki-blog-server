@@ -12,9 +12,9 @@ async function bootstrap() {
     // .addTag('Blog')
     .build()
   const document = SwaggerModule.createDocument(app, config)
-  SwaggerModule.setup('api-docs', app, document)
+  SwaggerModule.setup('admin-api-docs', app, document)
 
   await app.listen(4000)
-  console.log(`http://localhost:4000/api-docs`)
+  console.log(`http://localhost:4000/admin-api-docs`)
 }
 bootstrap()
