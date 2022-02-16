@@ -20,4 +20,18 @@ export class ArticlesController {
       throw new NotFoundException(`Get all articles failed`)
     }
   }
+
+  @Get('/latest')
+  @HttpCode(HttpStatus.OK)
+  async getLatestArticle(@Res() res: any) {
+    try {
+      const articles = await this.articlesService.findLatestArticle()
+      return res.json({
+        articles,
+      })
+    } catch (error) {
+      console.log('[server-Article] Error: ', error)
+      throw new NotFoundException(`Get all articles failed`)
+    }
+  }
 }

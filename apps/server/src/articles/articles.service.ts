@@ -14,8 +14,80 @@ export class ArticlesService {
     return await this.ArticlesModel.aggregate([
       {
         $match: {
-          isVisible: '1',
+          isVisible: 'true',
         },
+      },
+      {
+        $addFields: {
+          classification: {
+            $map: {
+              input: '$classification',
+              as: 'cate',
+              in: {
+                $toObjectId: '$$cate',
+              },
+            },
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: 'category',
+          localField: 'classification',
+          foreignField: '_id',
+          as: 'classification',
+        },
+      },
+      {
+        $project: {
+          'classification.createdAt': 0,
+          'classification.updatedAt': 0,
+        },
+      },
+    ])
+  }
+
+  async findLatestArticle(): Promise<ArticleDocument[]> {
+    return await this.ArticlesModel.aggregate([
+      {
+        $match: {
+          isVisible: 'true',
+        },
+      },
+      {
+        $addFields: {
+          classification: {
+            $map: {
+              input: '$classification',
+              as: 'cate',
+              in: {
+                $toObjectId: '$$cate',
+              },
+            },
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: 'category',
+          localField: 'classification',
+          foreignField: '_id',
+          as: 'classification',
+        },
+      },
+      {
+        $project: {
+          'classification.createdAt': 0,
+          'classification.updatedAt': 0,
+        },
+      },
+      {
+        $sort: {
+          updatedAt: -1,
+        },
+      },
+      {
+        $limit: 3,
       },
       {
         $project: {
