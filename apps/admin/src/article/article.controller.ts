@@ -62,7 +62,7 @@ export class ArticleController {
   }
 
   // 根据 articleId 获取文章
-  @Get(':id')
+  @Get('/:id')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
