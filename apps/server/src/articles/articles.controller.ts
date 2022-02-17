@@ -1,4 +1,12 @@
-import { Controller, Get, HttpCode, HttpStatus, NotFoundException, Res } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  NotFoundException,
+  Param,
+  Res,
+} from '@nestjs/common'
 import { ApiBasicAuth } from '@nestjs/swagger'
 import { ArticlesService } from './articles.service'
 
@@ -32,6 +40,20 @@ export class ArticlesController {
     } catch (error) {
       console.log('[server-Article] Error: ', error)
       throw new NotFoundException(`Get all articles failed`)
+    }
+  }
+
+  @Get('/:id')
+  @HttpCode(HttpStatus.OK)
+  async getArticleById(@Res() res: any, @Param('id') id: string) {
+    try {
+      const articles = await this.articlesService.findArticleById(id)
+      return res.json({
+        articles,
+      })
+    } catch (error) {
+      console.log('[server-Article] Error: ', error)
+      throw new NotFoundException(`Get article #${id} failed`)
     }
   }
 }

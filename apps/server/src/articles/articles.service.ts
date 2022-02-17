@@ -1,6 +1,6 @@
 import { ArticleDocument } from '@libs/db/interfaces/article.interface'
 import { Inject, Injectable } from '@nestjs/common'
-import { Model } from 'mongoose'
+import { Model, Types } from 'mongoose'
 import { ARTICLE_MODEL } from '../constants/server.constant'
 
 @Injectable()
@@ -47,6 +47,7 @@ export class ArticlesService {
     ])
   }
 
+  // get latest article
   async findLatestArticle(): Promise<ArticleDocument[]> {
     return await this.ArticlesModel.aggregate([
       {
@@ -88,6 +89,50 @@ export class ArticlesService {
       },
       {
         $limit: 3,
+      },
+      {
+        $project: {
+          markdown: 0,
+          createdAt: 0,
+          isVisible: 0,
+        },
+      },
+    ])
+  }
+
+  async findArticleById(id: string): Promise<ArticleDocument[]> {
+    return await this.ArticlesModel.aggregate([
+      {
+        $match: {
+          _id: new Types.ObjectId(id),
+        },
+      },
+      {
+        $addFields: {
+          classification: {
+            $map: {
+              input: '$classification',
+              as: 'cate',
+              in: {
+                $toObjectId: '$$cate',
+              },
+            },
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: 'category',
+          localField: 'classification',
+          foreignField: '_id',
+          as: 'classification',
+        },
+      },
+      {
+        $project: {
+          'classification.createdAt': 0,
+          'classification.updatedAt': 0,
+        },
       },
       {
         $project: {
