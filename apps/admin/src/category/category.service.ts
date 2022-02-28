@@ -1,18 +1,18 @@
 import { CreateCategoryDto } from '@libs/db/dto/category/create-category.dto'
 import { UpdateCategoryDto } from '@libs/db/dto/category/update-category.dto'
-import { CategoryDocument } from '@libs/db/interfaces/category.interface'
-import { Inject, Injectable } from '@nestjs/common'
+import { Category, CategoryDocument } from '@libs/db/schemas/category.schema'
+import { Injectable } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
-import { CATEGORY_MODEL } from '../constants/module.constant'
 
 @Injectable()
 export class CategoryService {
   constructor(
-    @Inject(CATEGORY_MODEL)
-    private CategoryModel: Model<CategoryDocument>,
+    @InjectModel(Category.name)
+    private CategoryModel: Model<Category>,
   ) {}
 
-  async createCategory(category: CreateCategoryDto): Promise<CategoryDocument> {
+  async createCategory(category: CreateCategoryDto): Promise<any> {
     const newCategory = new this.CategoryModel(category)
     return newCategory.save()
   }
@@ -31,7 +31,7 @@ export class CategoryService {
     })
   }
 
-  async deleteCategory(cateId: string): Promise<any> {
+  async deleteCategorybyId(cateId: string): Promise<any> {
     return await this.CategoryModel.findByIdAndRemove({ _id: cateId })
   }
 }

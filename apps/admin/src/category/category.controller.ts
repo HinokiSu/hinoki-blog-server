@@ -16,8 +16,8 @@ import {
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import { CategoryService } from './category.service'
 
-@ApiTags('Admin-Category')
-@Controller('admin/category')
+@ApiTags('Admin Category')
+@Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
@@ -106,7 +106,7 @@ export class CategoryController {
   @Delete('/:id')
   async deleteCategory(@Res() res: any, @Param('id') cateId: string) {
     try {
-      const result = await this.categoryService.deleteCategory(cateId)
+      const result = await this.categoryService.deleteCategorybyId(cateId)
       return res.json({
         message: 'Category has been deleted',
         result,
