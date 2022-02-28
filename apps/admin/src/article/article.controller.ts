@@ -17,8 +17,8 @@ import {
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import { ArticleService } from './article.service'
 
-@Controller('admin/article')
-@ApiTags('Admin-Article')
+@Controller()
+@ApiTags('Admin Article')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
@@ -116,10 +116,10 @@ export class ArticleController {
   })
   async deleteByArticleId(@Param('id') articleId: string, @Res() res: any) {
     try {
-      const article = await this.articleService.deleteByArticleId(articleId)
+      const result = await this.articleService.deleteByArticleId(articleId)
       return res.json({
         message: 'Article has been deleted',
-        article,
+        result,
       })
     } catch (err) {
       console.log('[Article] Error: : ', err)
@@ -136,7 +136,7 @@ export class ArticleController {
     try {
       const article = await this.articleService.deleteAllArticleByCategory(cateId)
       return res.json({
-        message: 'ok',
+        message: 'Article has been deleted',
         article,
       })
     } catch (error) {
