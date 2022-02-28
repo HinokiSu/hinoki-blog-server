@@ -1,41 +1,33 @@
-import { Schema } from 'mongoose'
 import { nowDateFormat } from '@libs/utils/format'
-export const ArticleSchema = new Schema(
-  {
-    title: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-    },
+import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose'
 
-    classification: {
-      type: Array,
-      default: [],
-    },
-    markdown: {
-      type: String,
-      required: true,
-    },
-    html: {
-      type: String,
-      required: true,
-    },
-    isVisible: {
-      type: String,
-      default: 'true',
-    },
-    createdAt: {
-      type: String,
-      default: nowDateFormat('YYYY-MM-DD hh:mm:ss'),
-    },
-    updatedAt: {
-      type: String,
-      default: nowDateFormat('YYYY-MM-DD hh:mm:ss'),
-    },
-  },
-  {
-    versionKey: false,
-  },
-)
+@Schema({ collection: 'article', versionKey: false })
+export class Article {
+  @Prop()
+  title: string
+
+  @Prop()
+  description: string
+
+  @Prop()
+  classification: []
+
+  @Prop()
+  markdown: string
+
+  @Prop()
+  html: string
+
+  @Prop({ default: 'true' })
+  isVisible: string
+
+  @Prop({ default: nowDateFormat('YYYY-MM-DD hh:mm:ss') })
+  createAt: string
+
+  @Prop({ default: nowDateFormat('YYYY-MM-DD hh:mm:ss') })
+  updateAt: string
+}
+
+export const ArticleSchema = SchemaFactory.createForClass(Article)
+
+export type ArticleDocument = Article & Document
