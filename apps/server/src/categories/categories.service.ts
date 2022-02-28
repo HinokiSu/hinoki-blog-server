@@ -1,4 +1,4 @@
-import { Category } from '@libs/db/schemas/category.schema'
+import { Category, CategoryDocument } from '@libs/db/schemas/category.schema'
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
@@ -6,11 +6,11 @@ import { Model, Types } from 'mongoose'
 @Injectable()
 export class CategoriesService {
   constructor(
-    @InjectModel('Category')
+    @InjectModel(Category.name)
     private readonly categoryModel: Model<Category>,
   ) {}
 
-  async readAllCategory(): Promise<Category[]> {
+  async readAllCategory(): Promise<CategoryDocument[]> {
     return await this.categoryModel
       .aggregate([
         {
@@ -23,7 +23,7 @@ export class CategoriesService {
       .exec()
   }
 
-  async readCategoryById(id: string): Promise<Category> {
+  async readCategoryById(id: string): Promise<CategoryDocument[]> {
     return await this.categoryModel
       .aggregate([
         {
@@ -37,7 +37,7 @@ export class CategoriesService {
             updatedAt: 0,
           },
         },
-      ])[0]
+      ])
       .exec()
   }
 }
