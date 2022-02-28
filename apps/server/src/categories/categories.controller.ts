@@ -10,8 +10,8 @@ import {
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import { CategoriesService } from './categories.service'
 
-@ApiTags('Server Category')
-@Controller('server/category')
+@ApiTags('Server Categories')
+@Controller()
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 

@@ -1,39 +1,43 @@
-import { CategoryDocument } from '@libs/db/interfaces/category.interface'
-import { Inject, Injectable } from '@nestjs/common'
-import { CATEGORY_MODEL } from 'apps/admin/src/constants/module.constant'
+import { Category } from '@libs/db/schemas/category.schema'
+import { Injectable } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
 
 @Injectable()
 export class CategoriesService {
   constructor(
-    @Inject(CATEGORY_MODEL)
-    private CategoryModel: Model<CategoryDocument>,
+    @InjectModel('Category')
+    private readonly categoryModel: Model<Category>,
   ) {}
 
-  async readAllCategory(): Promise<CategoryDocument[]> {
-    return await this.CategoryModel.aggregate([
-      {
-        $project: {
-          createdAt: 0,
-          updatedAt: 0,
+  async readAllCategory(): Promise<Category[]> {
+    return await this.categoryModel
+      .aggregate([
+        {
+          $project: {
+            createdAt: 0,
+            updatedAt: 0,
+          },
         },
-      },
-    ]).exec()
+      ])
+      .exec()
   }
 
-  async readCategoryById(id: string): Promise<CategoryDocument> {
-    return await this.CategoryModel.aggregate([
-      {
-        $match: {
-          _id: new Types.ObjectId(id),
+  async readCategoryById(id: string): Promise<Category> {
+    return await this.categoryModel
+      .aggregate([
+        {
+          $match: {
+            _id: new Types.ObjectId(id),
+          },
         },
-      },
-      {
-        $project: {
-          createdAt: 0,
-          updatedAt: 0,
+        {
+          $project: {
+            createdAt: 0,
+            updatedAt: 0,
+          },
         },
-      },
-    ])[0].exec()
+      ])[0]
+      .exec()
   }
 }
