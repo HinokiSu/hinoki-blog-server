@@ -36,3 +36,6 @@ lerna-debug.log*
 
 # Commitlint & Husky
 .husky
+
+# env
+.env
