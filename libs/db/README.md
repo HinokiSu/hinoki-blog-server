@@ -3,5 +3,9 @@
 数据库-Lib
 
 # Deps
+
 [`@nestjs/mapped-types`](https://github.com/nestjs/mapped-types)
 [`class-validator`](https://github.com/typestack/class-validator)
+
+## Hooks
+`mongooseModule` ： MongooseModule 依赖项模块
