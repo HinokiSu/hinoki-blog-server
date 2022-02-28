@@ -7,19 +7,19 @@ import {
   Param,
   Res,
 } from '@nestjs/common'
-import { ApiBasicAuth } from '@nestjs/swagger'
+import { ApiTags } from '@nestjs/swagger'
 import { ArticlesService } from './articles.service'
 
-@ApiBasicAuth('Server-Article')
-@Controller('article')
+@ApiTags('Server Article')
+@Controller()
 export class ArticlesController {
-  constructor(private readonly articlesService: ArticlesService) {}
+  constructor(private readonly articleService: ArticlesService) {}
 
   @Get('/all')
   @HttpCode(HttpStatus.OK)
   async getAllArticle(@Res() res: any) {
     try {
-      const articles = await this.articlesService.findAll()
+      const articles = await this.articleService.findAll()
       return res.json({
         articles,
       })
@@ -33,7 +33,7 @@ export class ArticlesController {
   @HttpCode(HttpStatus.OK)
   async getLatestArticle(@Res() res: any) {
     try {
-      const articles = await this.articlesService.findLatestArticle()
+      const articles = await this.articleService.findLatestArticle()
       return res.json({
         articles,
       })
@@ -47,7 +47,7 @@ export class ArticlesController {
   @HttpCode(HttpStatus.OK)
   async getArticleById(@Res() res: any, @Param('id') id: string) {
     try {
-      const articles = await this.articlesService.findArticleById(id)
+      const articles = await this.articleService.findArticleById(id)
       return res.json({
         articles,
       })

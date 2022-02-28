@@ -1,87 +1,65 @@
-import { ArticleDocument } from '@libs/db/interfaces/article.interface'
-import { Inject, Injectable } from '@nestjs/common'
-import { Model, Types } from 'mongoose'
-import { ARTICLE_MODEL } from '../constants/server.constant'
+import { Article } from '@libs/db/schemas/article.schema'
+import { Dependencies, Injectable } from '@nestjs/common'
+import { getModelToken, InjectModel } from '@nestjs/mongoose'
+import { Model, PipelineStage, Types } from 'mongoose'
 
+const commonPipeline: PipelineStage[] = [
+  {
+    $addFields: {
+      classification: {
+        $map: {
+          input: '$classification',
+          as: 'cate',
+          in: {
+            $toObjectId: '$$cate',
+          },
+        },
+      },
+    },
+  },
+  {
+    $lookup: {
+      from: 'category',
+      localField: 'classification',
+      foreignField: '_id',
+      as: 'classification',
+    },
+  },
+  {
+    $project: {
+      'classification.createdAt': 0,
+      'classification.updatedAt': 0,
+    },
+  },
+]
 @Injectable()
+@Dependencies(getModelToken(Article.name))
 export class ArticlesService {
   constructor(
-    @Inject(ARTICLE_MODEL)
-    private ArticlesModel: Model<ArticleDocument>,
+    @InjectModel(Article.name)
+    private articleModel: Model<Article>,
   ) {}
 
-  async findAll(): Promise<ArticleDocument[]> {
-    return await this.ArticlesModel.aggregate([
+  async findAll(): Promise<Article[]> {
+    return await this.articleModel.aggregate([
       {
         $match: {
           isVisible: 'true',
         },
       },
-      {
-        $addFields: {
-          classification: {
-            $map: {
-              input: '$classification',
-              as: 'cate',
-              in: {
-                $toObjectId: '$$cate',
-              },
-            },
-          },
-        },
-      },
-      {
-        $lookup: {
-          from: 'category',
-          localField: 'classification',
-          foreignField: '_id',
-          as: 'classification',
-        },
-      },
-      {
-        $project: {
-          'classification.createdAt': 0,
-          'classification.updatedAt': 0,
-        },
-      },
+      ...commonPipeline,
     ])
   }
 
   // get latest article
-  async findLatestArticle(): Promise<ArticleDocument[]> {
-    return await this.ArticlesModel.aggregate([
+  async findLatestArticle(): Promise<Article[]> {
+    return await this.articleModel.aggregate([
       {
         $match: {
           isVisible: 'true',
         },
       },
-      {
-        $addFields: {
-          classification: {
-            $map: {
-              input: '$classification',
-              as: 'cate',
-              in: {
-                $toObjectId: '$$cate',
-              },
-            },
-          },
-        },
-      },
-      {
-        $lookup: {
-          from: 'category',
-          localField: 'classification',
-          foreignField: '_id',
-          as: 'classification',
-        },
-      },
-      {
-        $project: {
-          'classification.createdAt': 0,
-          'classification.updatedAt': 0,
-        },
-      },
+      ...commonPipeline,
       {
         $sort: {
           updatedAt: -1,
@@ -100,40 +78,15 @@ export class ArticlesService {
     ])
   }
 
-  async findArticleById(id: string): Promise<ArticleDocument[]> {
-    return await this.ArticlesModel.aggregate([
+  async findArticleById(id: string): Promise<Article[]> {
+    return await this.articleModel.aggregate([
       {
         $match: {
           _id: new Types.ObjectId(id),
+          isVisible: 'true',
         },
       },
-      {
-        $addFields: {
-          classification: {
-            $map: {
-              input: '$classification',
-              as: 'cate',
-              in: {
-                $toObjectId: '$$cate',
-              },
-            },
-          },
-        },
-      },
-      {
-        $lookup: {
-          from: 'category',
-          localField: 'classification',
-          foreignField: '_id',
-          as: 'classification',
-        },
-      },
-      {
-        $project: {
-          'classification.createdAt': 0,
-          'classification.updatedAt': 0,
-        },
-      },
+      ...commonPipeline,
       {
         $project: {
           markdown: 0,
