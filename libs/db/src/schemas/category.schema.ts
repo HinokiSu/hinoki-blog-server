@@ -4,7 +4,7 @@ import { nowDateFormat } from '@libs/utils'
 
 // collection 自定义集合名称， versionKey,禁止文档内置版本值
 @Schema({ collection: 'category', versionKey: false })
-class CategoryDocument {
+export class Category {
   @Prop()
   name: string
 
@@ -15,6 +15,6 @@ class CategoryDocument {
   updatedAt: string
 }
 
-export const categorySchema = SchemaFactory.createForClass(CategoryDocument)
+export const CategorySchema = SchemaFactory.createForClass(Category)
 
-export type Category = CategoryDocument & Document
+export type CategoryDocument = Category & Document
