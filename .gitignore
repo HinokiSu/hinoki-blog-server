@@ -38,4 +38,4 @@ lerna-debug.log*
 .husky
 
 # env
-.env
+*.env
