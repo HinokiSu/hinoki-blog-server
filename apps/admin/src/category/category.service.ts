@@ -9,29 +9,29 @@ import { Model } from 'mongoose'
 export class CategoryService {
   constructor(
     @InjectModel(Category.name)
-    private CategoryModel: Model<Category>,
+    private categoryModel: Model<Category>,
   ) {}
 
   async createCategory(category: CreateCategoryDto): Promise<any> {
-    const newCategory = new this.CategoryModel(category)
+    const newCategory = new this.categoryModel(category)
     return newCategory.save()
   }
 
   async readAllCategory(): Promise<CategoryDocument[]> {
-    return await this.CategoryModel.find({}).exec()
+    return await this.categoryModel.find({}).exec()
   }
 
   async readCategoryById(cateId: string): Promise<CategoryDocument> {
-    return await this.CategoryModel.findById({ _id: cateId }).exec()
+    return await this.categoryModel.findById({ _id: cateId }).exec()
   }
 
   async updateCategory(cateId: string, category: UpdateCategoryDto): Promise<CategoryDocument> {
-    return await this.CategoryModel.findByIdAndUpdate({ _id: cateId }, category, {
+    return await this.categoryModel.findByIdAndUpdate({ _id: cateId }, category, {
       new: true,
     })
   }
 
   async deleteCategorybyId(cateId: string): Promise<any> {
-    return await this.CategoryModel.findByIdAndRemove({ _id: cateId })
+    return await this.categoryModel.findByIdAndRemove({ _id: cateId })
   }
 }
