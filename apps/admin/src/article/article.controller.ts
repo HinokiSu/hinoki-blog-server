@@ -70,9 +70,9 @@ export class ArticleController {
   })
   async findByArticleId(@Res() res: any, @Param('id') articleId: string) {
     try {
-      const article = await this.articleService.readByArticleId(articleId)
+      const articles = await this.articleService.readByArticleId(articleId)
       return res.json({
-        article,
+        articles,
       })
     } catch (err) {
       console.log('[Article] Error: : ', err)
@@ -141,6 +141,27 @@ export class ArticleController {
       })
     } catch (error) {
       throw new NotFoundException(`Article Category #${cateId} not found`)
+    }
+  }
+
+  // 分页查询
+  @Get('/pagination/:pagenum/:pagesize')
+  @ApiResponse({})
+  async findArticlePagination(
+    @Res() res: any,
+    @Param('pagenum') pageNum: string,
+    @Param('pagesize') pageSize: string,
+  ) {
+    try {
+      const articles = await this.articleService.findArticleByPagination(pageNum, pageSize)
+      const count = await this.articleService.findArticleCount()
+      return res.json({
+        message: 'Article has been deleted',
+        total: count,
+        articles,
+      })
+    } catch (error) {
+      throw new NotFoundException(`Article Pagation failed`)
     }
   }
 }

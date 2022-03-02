@@ -70,4 +70,19 @@ export class ArticleService {
       },
     )
   }
+
+  // 分页查询
+  async findArticleByPagination(curPage: string, pageSize: string): Promise<any[]> {
+    return await this.articleModel
+      .find({})
+      .skip((parseInt(curPage) - 1) * parseInt(pageSize))
+      .limit(parseInt(pageSize))
+      .sort({ _id: -1 })
+      .exec()
+  }
+
+  // 总计个数
+  async findArticleCount() {
+    return await this.articleModel.countDocuments()
+  }
 }
