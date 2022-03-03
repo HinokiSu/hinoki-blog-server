@@ -34,7 +34,7 @@ export class CategoryController {
       return res.json(newCategory)
     } catch (err) {
       console.log('[Category] Error: : ', err)
-      throw new NotFoundException(`Get all articles failed`)
+      throw new NotFoundException(`Get all categories failed`)
     }
   }
 
