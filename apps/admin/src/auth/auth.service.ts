@@ -1,5 +1,5 @@
 import { AuthLoginDto } from '@libs/db/dto/user/auth-login.dto'
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcryptjs'
 
@@ -14,7 +14,7 @@ export class AuthService {
     // 验证用户
     const user = await this.userService.findUserByUsername(authLoginDto.username)
     if (!user) {
-      throw Error('用户不存在')
+      throw new UnauthorizedException()
     }
     // 用户存在，判断密码是否正确
     if (!(await bcrypt.compare(authLoginDto.password, user.password))) {
@@ -27,6 +27,8 @@ export class AuthService {
     // 返回token
     return {
       access_token: this.jwtService.sign(payload),
+      user_id: user._id,
+      username: user.username,
     }
   }
 }
