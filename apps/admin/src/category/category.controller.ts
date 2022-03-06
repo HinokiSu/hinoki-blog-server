@@ -27,7 +27,7 @@ export class CategoryController {
     description: '创建文章类别',
   })
   @Post('/new')
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   async createCategory(@Res() res: any, @Body() category: CreateCategoryDto) {
     try {
       const newCategory = await this.categoryService.createCategory(category)
