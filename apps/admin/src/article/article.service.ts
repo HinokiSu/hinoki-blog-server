@@ -85,4 +85,15 @@ export class ArticleService {
   async findArticleCount() {
     return await this.articleModel.countDocuments()
   }
+
+  function
+  async findArticleByFuzzy(keyword: string) {
+    const escapeRegex = (text) => {
+      return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
+    }
+    const reg = new RegExp(escapeRegex(keyword), 'gi')
+    return await this.articleModel.find({
+      title: reg,
+    })
+  }
 }

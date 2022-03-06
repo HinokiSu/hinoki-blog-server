@@ -28,7 +28,7 @@ export class ArticleController {
     description: '创建文章成功',
   })
   @Post('/new')
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   async createArticle(@Res() res: any, @Body() article: CreateArticleDto) {
     try {
       const newArticle = await this.articleService.create(article)
@@ -109,9 +109,9 @@ export class ArticleController {
 
   // 根据 articleId 删除文章
   @Delete('/:id')
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(HttpStatus.OK)
   @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
+    status: HttpStatus.OK,
     description: '删除指定文章',
   })
   async deleteByArticleId(@Param('id') articleId: string, @Res() res: any) {
@@ -128,8 +128,9 @@ export class ArticleController {
   }
 
   @Delete('/category/:cid')
+  @HttpCode(HttpStatus.OK)
   @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
+    status: HttpStatus.OK,
     description: '删除含有该categoryId的所有文章classification',
   })
   async deleteCategoryByArId(@Param('cid') cateId: string, @Res() res: any) {
@@ -146,7 +147,11 @@ export class ArticleController {
 
   // 分页查询
   @Get('/pagination/:pagenum/:pagesize')
-  @ApiResponse({})
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '分页查询',
+  })
   async findArticlePagination(
     @Res() res: any,
     @Param('pagenum') pageNum: string,
@@ -162,6 +167,26 @@ export class ArticleController {
       })
     } catch (error) {
       throw new NotFoundException(`Article Pagation failed`)
+    }
+  }
+
+  // 模糊查询 查询标题
+  @Get('/search/:keyword')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '模糊查询标题',
+  })
+  async findArticleFuzzyByTitle(@Res() res: any, @Param('keyword') keyword: string) {
+    try {
+      const articles = await this.articleService.findArticleByFuzzy(keyword)
+      res.json({
+        message: 'Article has been found',
+        total: articles.length,
+        articles,
+      })
+    } catch (error) {
+      throw new NotFoundException(`Article of ${keyword} not found`)
     }
   }
 }
