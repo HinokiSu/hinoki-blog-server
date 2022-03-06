@@ -52,4 +52,34 @@ export class UserService {
       },
     ])
   }
+
+  // 获取所用用户，除了admin
+  async findUsers(): Promise<any> {
+    return await this.userModel.aggregate([
+      {
+        $match: {
+          username: {
+            $ne: 'admin',
+          },
+        },
+      },
+      {
+        $project: {
+          password: 0,
+        },
+      },
+    ])
+  }
+
+  // 更新用户信息
+  /*  async updateUser(id: string): Promise<any> {
+    return await this.userModel.findByIdAndUpdate({ _id: id }, {username: }, {
+      new: true,
+    })
+  } */
+
+  // 删除用户
+  async deleteUser(id: string): Promise<any> {
+    return await this.userModel.findByIdAndRemove({ _id: id })
+  }
 }

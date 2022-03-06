@@ -2,15 +2,18 @@ import { CreateUserDto } from '@libs/db/dto/user/create-user.dto'
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
   NotFoundException,
   Param,
   Post,
+  Put,
   Res,
 } from '@nestjs/common'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
+import { get } from 'http'
 import { UserService } from './user.service'
 
 @ApiTags('Admin User')
@@ -24,11 +27,11 @@ export class UserController {
     description: '创建用户',
   })
   @Post('/new')
-  @HttpCode(HttpStatus.CREATED)
-  async createUser(@Res() res: any, @Body() category: CreateUserDto) {
+  @HttpCode(HttpStatus.OK)
+  async createUser(@Res() res: any, @Body() user: CreateUserDto) {
     try {
-      const user = await this.userService.createUser(category)
-      if (user === 'exist') {
+      const newUser = await this.userService.createUser(user)
+      if (newUser === 'exist') {
         return res.json({
           message: 'User exist',
           user: '',
@@ -36,7 +39,7 @@ export class UserController {
       }
       return res.json({
         message: 'User has been successfully created',
-        user,
+        user: newUser,
       })
     } catch (err) {
       console.log('[User] Error: : ', err)
@@ -61,6 +64,55 @@ export class UserController {
     } catch (err) {
       console.log('[User] Error: : ', err)
       throw new NotFoundException(`Get User #${uid} failed`)
+    }
+  }
+
+  // 获取所有用户，除了admin
+  @Get('/')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '获取所有用户,除了admin',
+  })
+  async findAllUser(@Res() res: any) {
+    try {
+      const users = await this.userService.findUsers()
+      res.json({
+        message: 'Users has been found successfully',
+        users,
+      })
+    } catch (err) {
+      console.log('[User] Error: : ', err)
+      throw new NotFoundException(`Get Users failed`)
+    }
+  }
+
+  /* // 更新用户信息
+  @Put('/:id')
+  async updateUser(@Res() res: any, @Param('id') id: string) {
+    try {
+      const users = await this.userService.updateUser(id)
+      res.json({
+        message: 'User has been Updated successfully',
+        users,
+      })
+    } catch (err) {
+      console.log('[User] Error: : ', err)
+      throw new NotFoundException(`Update User failed`)
+    }
+  } */
+
+  // 删除用户
+  @Delete('/:id')
+  async deleteUser(@Res() res: any, @Param('id') id: string) {
+    try {
+      await this.userService.deleteUser(id)
+      res.json({
+        message: 'Users has been deleted successfully',
+      })
+    } catch (err) {
+      console.log('[User] Error: : ', err)
+      throw new NotFoundException(`Delete Users failed`)
     }
   }
 }
