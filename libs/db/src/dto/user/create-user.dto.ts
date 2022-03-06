@@ -22,15 +22,13 @@ export class CreateUserDto {
     example: '2022-1-19 16:10:21',
     description: '用户创建的时间',
   })
-  @IsNotEmpty()
   @IsString()
-  readonly createAt: string
+  readonly createdAt: string
 
   @ApiProperty({
     example: '2022-1-19 16:10:21',
     description: '用户更新的时间',
   })
-  @IsNotEmpty()
   @IsString()
-  readonly updateAt: string
+  readonly updatedAt: string
 }
