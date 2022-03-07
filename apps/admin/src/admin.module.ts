@@ -6,6 +6,7 @@ import { adminRoute } from './route'
 import { DatabaseModule } from '@libs/db'
 import { UserModule } from './user/user.module'
 import { AuthModule } from './auth/auth.module'
+import { StateModule } from './state/state.module'
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AuthModule } from './auth/auth.module'
     CategoryModule,
     UserModule,
     AuthModule,
+    StateModule,
     RouterModule.register(adminRoute),
   ],
 })
