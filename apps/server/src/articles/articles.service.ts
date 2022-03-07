@@ -79,6 +79,7 @@ export class ArticlesService {
   }
 
   async findArticleById(id: string): Promise<Article[]> {
+    await this.setTotalVisits(id)
     return await this.articleModel.aggregate([
       {
         $match: {
@@ -95,5 +96,10 @@ export class ArticlesService {
         },
       },
     ])
+  }
+
+  // 访问数+1
+  async setTotalVisits(id: string) {
+    return await this.articleModel.updateOne({ _id: id }, { $inc: { totalVisits: 1 } })
   }
 }
