@@ -34,4 +34,16 @@ export class CategoryService {
   async deleteCategorybyId(cateId: string): Promise<any> {
     return await this.categoryModel.findByIdAndRemove({ _id: cateId })
   }
+
+  // 获得所有类别
+  async findAllCategoryForState() {
+    return await this.categoryModel.aggregate([
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+        },
+      },
+    ])
+  }
 }
