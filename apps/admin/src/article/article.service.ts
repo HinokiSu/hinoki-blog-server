@@ -86,7 +86,6 @@ export class ArticleService {
     return await this.articleModel.countDocuments()
   }
 
-  function
   async findArticleByFuzzy(keyword: string) {
     const escapeRegex = (text) => {
       return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
@@ -95,5 +94,56 @@ export class ArticleService {
     return await this.articleModel.find({
       title: reg,
     })
+  }
+
+  //统计单个类别的 文章总数
+  /**
+   *
+   * @param cid 类别id
+   * @returns number 总数
+   */
+  async findArticlesCountByCategory(cid: string) {
+    return await this.articleModel.aggregate([
+      {
+        $project: {
+          classification: 1,
+          title: 1,
+        },
+      },
+      {
+        $addFields: {
+          classification: {
+            $map: {
+              input: '$classification',
+              as: 'cate',
+              in: {
+                $toObjectId: '$$cate',
+              },
+            },
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: 'category',
+          localField: 'classification',
+          foreignField: '_id',
+          as: 'classification',
+        },
+      },
+      {
+        $unwind: {
+          path: '$classification',
+        },
+      },
+      {
+        $match: {
+          'classification._id': new Types.ObjectId(cid),
+        },
+      },
+      {
+        $count: 'total',
+      },
+    ])
   }
 }
