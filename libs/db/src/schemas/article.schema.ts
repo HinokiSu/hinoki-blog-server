@@ -26,6 +26,9 @@ export class Article {
 
   @Prop({ default: nowDateFormat('YYYY-MM-DD hh:mm:ss') })
   updateAt: string
+
+  @Prop({ default: 0 })
+  totalVisits: number
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article)

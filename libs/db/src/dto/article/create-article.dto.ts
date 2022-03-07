@@ -62,4 +62,11 @@ export class CreateArticleDto {
   })
   @IsString()
   readonly updatedAt: string
+
+  @ApiProperty({
+    example: '1',
+    description: '文章总访问量',
+  })
+  @IsString()
+  totalVisits: string
 }
