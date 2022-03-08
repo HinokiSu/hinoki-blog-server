@@ -47,7 +47,19 @@ export class ArticlesService {
           isVisible: 'true',
         },
       },
+      {
+        $sort: {
+          updatedAt: -1,
+        },
+      },
       ...commonPipeline,
+      {
+        $project: {
+          createdAt: 0,
+          isVisible: 0,
+          totalVisits: 0,
+        },
+      },
     ])
   }
 
@@ -73,6 +85,7 @@ export class ArticlesService {
           markdown: 0,
           createdAt: 0,
           isVisible: 0,
+          totalVisits: 0,
         },
       },
     ])
@@ -93,6 +106,7 @@ export class ArticlesService {
           markdown: 0,
           createdAt: 0,
           isVisible: 0,
+          totalVisits: 0,
         },
       },
     ])
