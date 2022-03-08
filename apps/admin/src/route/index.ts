@@ -8,28 +8,23 @@ import { UserModule } from '../user/user.module'
 // admin应用的主路由
 export const adminRoute: Routes = [
   {
-    path: 'admin',
-    children: [
-      {
-        path: 'article',
-        module: ArticleModule,
-      },
-      {
-        path: 'category',
-        module: CategoryModule,
-      },
-      {
-        path: 'user',
-        module: UserModule,
-      },
-      {
-        path: 'auth',
-        module: AuthModule,
-      },
-      {
-        path: 'state',
-        module: StateModule,
-      },
-    ],
+    path: 'article',
+    module: ArticleModule,
+  },
+  {
+    path: 'category',
+    module: CategoryModule,
+  },
+  {
+    path: 'user',
+    module: UserModule,
+  },
+  {
+    path: 'auth',
+    module: AuthModule,
+  },
+  {
+    path: 'state',
+    module: StateModule,
   },
 ]
