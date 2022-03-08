@@ -22,10 +22,10 @@ export class Article {
   isVisible: string
 
   @Prop({ default: nowDateFormat('YYYY-MM-DD hh:mm:ss') })
-  createAt: string
+  createdAt: string
 
   @Prop({ default: nowDateFormat('YYYY-MM-DD hh:mm:ss') })
-  updateAt: string
+  updatedAt: string
 
   @Prop({ default: 0 })
   totalVisits: number
