@@ -12,7 +12,21 @@
 
 # Description
 
-Hinoki's Blog Server is a personal blog backend service.
+Hinoki's Blog Server is a simple personal blog backend service platform.
+
+# Precondition
+
+- add `env.dev.env` and `env.prod.env` in root direction.
+
+```
+DATABASE_HOST=localhost
+DATABASE_PORT=27017
+DATABASE_USER=''
+DATABASE_PWD=''
+DATABASE_COLLECTION=
+
+JWT_SECRET=
+```
 
 ## Installation
 
@@ -20,18 +34,46 @@ Hinoki's Blog Server is a personal blog backend service.
 $ npm install
 ```
 
-## Running the app
+## Running
 
 - Running the admin app
 
-```
-nest start -w admin
+```bash
+$ npm run start admin
 ```
 
 - Running the server app
 
+```bash
+$ npm run start server
 ```
-nest start -w server
+
+## Build
+
+```
+$ npm run build:all
+```
+
+## Preview
+
+> need the `env.prod.env` or `env.prod.env` put in `dist/apps/admin` and `dist/apps/server` dirction. so that it can run.  
+> Tip: need copy two files
+
+```bash
+$ npm run start prod:server
+or
+$ npm run start prod:admin
+```
+
+## Deploy
+
+> Tips: need to use `pm2`  
+> please modify `pm2.admin.config.json` and `pm2.server.config.json`
+
+```bash
+$ pm2 start pm2.admin.config.json
+or
+$ pm2 start pm2.server.config.json
 ```
 
 ## License
