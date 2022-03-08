@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "blog_server_nestjs",
+      "name": "blog_admin_nestjs",
       "exec_interpreter": "node",
       "exec_mode": "fork",
       "cwd": "dist/apps/admin/",
