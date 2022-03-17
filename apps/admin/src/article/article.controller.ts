@@ -161,7 +161,7 @@ export class ArticleController {
       const articles = await this.articleService.findArticleByPagination(pageNum, pageSize)
       const count = await this.articleService.findArticleCount()
       return res.json({
-        message: 'Article has been deleted',
+        message: 'Article has been Found',
         total: count,
         articles,
       })

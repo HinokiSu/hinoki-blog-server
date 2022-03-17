@@ -4,6 +4,7 @@ import { Article, ArticleDocument } from '@libs/db/schemas/article.schema'
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, PipelineStage, Types } from 'mongoose'
+import { IFoundArticle, IPageviews, ITopArticle, ITotalArticle } from '../interfaces'
 
 const commonPipeLine: PipelineStage[] = [
   {
@@ -20,6 +21,29 @@ const commonPipeLine: PipelineStage[] = [
     },
   },
 ]
+
+const PipeByCategoryId = (cid: string): PipelineStage[] => {
+  return [
+    {
+      $lookup: {
+        from: 'category',
+        localField: 'classification',
+        foreignField: '_id',
+        as: 'classification',
+      },
+    },
+    {
+      $unwind: {
+        path: '$classification',
+      },
+    },
+    {
+      $match: {
+        'classification._id': new Types.ObjectId(cid),
+      },
+    },
+  ]
+}
 
 @Injectable()
 export class ArticleService {
@@ -81,13 +105,13 @@ export class ArticleService {
       .exec()
   }
 
-  // 总计个数
+  // 总计文章个数
   async findArticleCount() {
     return await this.articleModel.countDocuments()
   }
 
   async findArticleByFuzzy(keyword: string) {
-    const escapeRegex = (text) => {
+    const escapeRegex = (text: string) => {
       return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
     }
     const reg = new RegExp(escapeRegex(keyword), 'gi')
@@ -100,9 +124,9 @@ export class ArticleService {
   /**
    *
    * @param cid 类别id
-   * @returns number 总数
+   * @returns 单个类别文章的数组
    */
-  async findArticlesCountByCategory(cid: string) {
+  async findTotalArticleByCategoryId(cid: string): Promise<ITotalArticle[]> {
     return await this.articleModel.aggregate([
       {
         $project: {
@@ -110,39 +134,77 @@ export class ArticleService {
           title: 1,
         },
       },
+      ...commonPipeLine,
+      ...PipeByCategoryId(cid),
       {
-        $addFields: {
-          classification: {
-            $map: {
-              input: '$classification',
-              as: 'cate',
-              in: {
-                $toObjectId: '$$cate',
-              },
-            },
+        $count: 'total',
+      },
+    ])
+  }
+
+  /**
+   * 统计 单个类别中所有文章的浏览量
+   * @param cid 类别id
+   * @returns 单个类别中所有文章浏览量的总和
+   */
+  async findVisitsByCategoryId(cid: string): Promise<IPageviews[]> {
+    return await this.articleModel.aggregate([
+      {
+        $project: {
+          classification: 1,
+          title: 1,
+          totalVisits: 1,
+        },
+      },
+      ...commonPipeLine,
+      ...PipeByCategoryId(cid),
+      {
+        $group: {
+          _id: null,
+          totalVisits: {
+            $sum: '$totalVisits',
           },
         },
       },
+    ])
+  }
+
+  /**
+   * 查找浏览量前五的文章
+   * @returns 前5的文章
+   */
+  async findTopArticle(): Promise<ITopArticle[]> {
+    return await this.articleModel.aggregate([
       {
-        $lookup: {
-          from: 'category',
-          localField: 'classification',
-          foreignField: '_id',
-          as: 'classification',
+        $sort: {
+          totalVisits: -1,
         },
       },
       {
-        $unwind: {
-          path: '$classification',
-        },
+        $limit: 5,
       },
       {
-        $match: {
-          'classification._id': new Types.ObjectId(cid),
+        $project: {
+          _id: 1,
+          title: 1,
+          totalVisits: 1,
         },
       },
+    ])
+  }
+  /**
+   * 获取所有文章浏览量的总和
+   * @returns [{id: null, totalVisits: NA }]
+   */
+  async findVisitsOfAllArticle(): Promise<IPageviews[]> {
+    return await this.articleModel.aggregate([
       {
-        $count: 'total',
+        $group: {
+          _id: null,
+          totalVisits: {
+            $sum: '$totalVisits',
+          },
+        },
       },
     ])
   }
