@@ -26,4 +26,44 @@ export class StateController {
       throw new NotFoundException(`State: get State by category failed`)
     }
   }
+
+  // 获取浏览量前五的文章
+  @ApiResponse({
+    status: 200,
+    description: '获取浏览量前五的文章',
+  })
+  @Get('/article/top')
+  @HttpCode(HttpStatus.OK)
+  async getTotalArticle(@Res() res: any) {
+    try {
+      const result = await this.stateService.findTopArticleList()
+      return res.json({
+        message: 'success',
+        fettle: result,
+      })
+    } catch (err) {
+      console.log('[State] Error: : ', err)
+      throw new NotFoundException(`State: get State by category failed`)
+    }
+  }
+
+  // 统计每一个类别中的 所有的文章累计的浏览量
+  @ApiResponse({
+    status: 200,
+    description: '',
+  })
+  @Get('/pageviews/category')
+  @HttpCode(HttpStatus.OK)
+  async getTotalVisitByCategory(@Res() res: any) {
+    try {
+      const result = await this.stateService.findTotalVisitByCategory()
+      return res.json({
+        message: 'success',
+        fettle: result,
+      })
+    } catch (err) {
+      console.log('[State] Error: : ', err)
+      throw new NotFoundException(`State: get State by category failed`)
+    }
+  }
 }
