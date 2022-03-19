@@ -21,10 +21,10 @@ export class Article {
   @Prop({ default: 'true' })
   isVisible: string
 
-  @Prop({ default: nowDateFormat('YYYY-MM-DD hh:mm:ss') })
+  @Prop({ default: nowDateFormat('YYYY-MM-DD HH:mm:ss') })
   createdAt: string
 
-  @Prop({ default: nowDateFormat('YYYY-MM-DD hh:mm:ss') })
+  @Prop({ default: nowDateFormat('YYYY-MM-DD HH:mm:ss') })
   updatedAt: string
 
   @Prop({ default: 0 })
