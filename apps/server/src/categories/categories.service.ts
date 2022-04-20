@@ -10,6 +10,7 @@ export class CategoriesService {
     private readonly categoryModel: Model<Category>,
   ) {}
 
+  // 获取所有类别
   async readAllCategory(): Promise<CategoryDocument[]> {
     return await this.categoryModel
       .aggregate([
@@ -23,6 +24,7 @@ export class CategoriesService {
       .exec()
   }
 
+  // 根据ID获取类别
   async readCategoryById(id: string): Promise<CategoryDocument[]> {
     return await this.categoryModel
       .aggregate([

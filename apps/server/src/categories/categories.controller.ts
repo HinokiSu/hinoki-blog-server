@@ -25,6 +25,7 @@ export class CategoriesController {
     try {
       const categories = await this.categoriesService.readAllCategory()
       return res.json({
+        message: 'Get categories has been found',
         categories,
       })
     } catch (err) {
@@ -41,9 +42,10 @@ export class CategoriesController {
   @HttpCode(HttpStatus.OK)
   async getCategoryByID(@Res() res: any, @Param('id') id: string) {
     try {
-      const category = await this.categoriesService.readCategoryById(id)
+      const categories = await this.categoriesService.readCategoryById(id)
       return res.json({
-        category,
+        message: 'Get categories has been found by id',
+        categories,
       })
     } catch (err) {
       console.log(`[Server] Category Error: \n ${err}`)
