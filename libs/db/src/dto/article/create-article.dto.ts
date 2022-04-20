@@ -34,14 +34,6 @@ export class CreateArticleDto {
   readonly markdown: string
 
   @ApiProperty({
-    example: '<h1>Nestjs...</h1>',
-    description: 'md转换后的html',
-  })
-  @IsNotEmpty()
-  @IsString()
-  readonly html: string
-
-  @ApiProperty({
     example: 'true',
     description: '文章是否可见',
   })

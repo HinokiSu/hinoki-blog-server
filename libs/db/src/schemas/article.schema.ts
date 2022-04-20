@@ -15,9 +15,6 @@ export class Article {
   @Prop()
   markdown: string
 
-  @Prop()
-  html: string
-
   @Prop({ default: 'true' })
   isVisible: string
 
