@@ -7,7 +7,7 @@ import {
   Param,
   Res,
 } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import { ArticlesService } from './articles.service'
 
 @ApiTags('Server Article')
@@ -17,10 +17,15 @@ export class ArticlesController {
 
   @Get('/all')
   @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '获取所有文章',
+  })
   async getAllArticle(@Res() res: any) {
     try {
       const articles = await this.articleService.findAll()
       return res.json({
+        message: 'get all article success',
         articles,
       })
     } catch (error) {
@@ -31,10 +36,15 @@ export class ArticlesController {
 
   @Get('/latest')
   @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '获取最新的几篇文章',
+  })
   async getLatestArticle(@Res() res: any) {
     try {
       const articles = await this.articleService.findLatestArticle()
       return res.json({
+        message: 'get latest articles has been found',
         articles,
       })
     } catch (error) {
@@ -45,15 +55,58 @@ export class ArticlesController {
 
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '根据文章id获取文章',
+  })
   async getArticleById(@Res() res: any, @Param('id') id: string) {
     try {
       const articles = await this.articleService.findArticleById(id)
       return res.json({
+        message: 'Get article has been found by id',
         articles,
       })
     } catch (error) {
       console.log('[server-Article] Error: ', error)
       throw new NotFoundException(`Get article #${id} failed`)
+    }
+  }
+
+  @Get('/search/:keyword')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '根据keyword模糊查询文章标题',
+  })
+  async getArticleFuzzyByTitle(@Res() res: any, @Param('keyword') keyword: string) {
+    try {
+      const articles = await this.articleService.findArticleByFuzzy(keyword)
+      res.json({
+        message: 'Get artcles has been found by fuzzy search',
+        articles,
+      })
+    } catch (error) {
+      console.log('[server-Article] Error: ', error)
+      throw new NotFoundException(`Get  article by fuzzy search #${keyword} failed`)
+    }
+  }
+
+  @Get('/category/:cateid')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '根据类别ID查找文章',
+  })
+  async getArticlesByCateId(@Res() res: any, @Param('cateid') cateId: string) {
+    try {
+      const articles = await this.articleService.findArticlesByCateId(cateId)
+      res.json({
+        message: 'Get artcles has been found by fuzzy search',
+        articles,
+      })
+    } catch (error) {
+      console.log('[server-Article] Error: ', error)
+      throw new NotFoundException(`Get  article by CateId #${cateId} failed`)
     }
   }
 }
