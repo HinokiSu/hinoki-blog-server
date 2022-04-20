@@ -58,10 +58,12 @@ export class ArticleService {
     return await newArticle.save()
   }
 
+  // 读取所有文章
   async readAll(): Promise<ArticleDocument[]> {
     return await this.articleModel.aggregate(commonPipeLine)
   }
 
+  // 根据ID查找文章
   async readByArticleId(articleId: string): Promise<ArticleDocument[]> {
     return await this.articleModel.aggregate([
       {
@@ -74,16 +76,19 @@ export class ArticleService {
     ])
   }
 
+  // 根据ID更新文章
   async updateByArticleId(articleId: string, article: UpdateArticleDto): Promise<any> {
     return await this.articleModel.findByIdAndUpdate({ _id: articleId }, article, {
       new: true,
     })
   }
 
+  // 根据ID删除文章
   async deleteByArticleId(articleId: string): Promise<any> {
     return await this.articleModel.findByIdAndRemove(articleId)
   }
 
+  // 根据类别 删除文章
   async deleteAllArticleByCategory(cateId: string): Promise<any> {
     return await this.articleModel.updateMany(
       { classification: cateId },
@@ -110,6 +115,12 @@ export class ArticleService {
     return await this.articleModel.countDocuments()
   }
 
+  // 模糊查询(仅查询标题title)
+  /**
+   *
+   * @param keyword string 关键词
+   * @returns Array 匹配到的文章列表
+   */
   async findArticleByFuzzy(keyword: string) {
     const escapeRegex = (text: string) => {
       return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')

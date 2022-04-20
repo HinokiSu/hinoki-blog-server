@@ -127,6 +127,7 @@ export class ArticleController {
     }
   }
 
+  // 删除文章
   @Delete('/category/:cid')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
