@@ -7,6 +7,8 @@ import { DatabaseModule } from '@libs/db'
 import { UserModule } from './user/user.module'
 import { AuthModule } from './auth/auth.module'
 import { StateModule } from './state/state.module'
+import { CommentModule } from './comment/comment.module'
+import { VisitorModule } from './visitor/visitor.module'
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { StateModule } from './state/state.module'
     UserModule,
     AuthModule,
     StateModule,
+    VisitorModule,
+    CommentModule,
     RouterModule.register(adminRoute),
   ],
 })

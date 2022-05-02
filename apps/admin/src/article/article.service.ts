@@ -4,7 +4,7 @@ import { Article, ArticleDocument } from '@libs/db/schemas/article.schema'
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, PipelineStage, Types } from 'mongoose'
-import { IFoundArticle, IPageviews, ITopArticle, ITotalArticle } from '../interfaces'
+import { ICommentState, IPageviews, ITopArticle, ITotalArticle } from '../interfaces'
 
 const commonPipeLine: PipelineStage[] = [
   {
@@ -215,6 +215,21 @@ export class ArticleService {
           totalVisits: {
             $sum: '$totalVisits',
           },
+        },
+      },
+    ])
+  }
+
+  /**
+   * 获取所有文章的Id
+   * @returns Array
+   */
+  async findAllArticleId(): Promise<Array<ICommentState>> {
+    return await this.articleModel.aggregate([
+      {
+        $project: {
+          _id: 1,
+          title: 1,
         },
       },
     ])

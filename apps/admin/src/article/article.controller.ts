@@ -54,6 +54,7 @@ export class ArticleController {
       const articles = await this.articleService.readAll()
       return res.json({
         articles,
+        message: 'Article has been successfully found',
       })
     } catch (err) {
       console.log('[Article] Error: : ', err)
@@ -73,6 +74,7 @@ export class ArticleController {
       const articles = await this.articleService.readByArticleId(articleId)
       return res.json({
         articles,
+        message: 'Article has been successfully created',
       })
     } catch (err) {
       console.log('[Article] Error: : ', err)
