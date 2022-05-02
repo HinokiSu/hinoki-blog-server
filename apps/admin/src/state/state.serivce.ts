@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { ArticleService } from '../article/article.service'
 import { CategoryService } from '../category/category.service'
+import { CommentService } from '../comment/comment.service'
 import { IFoundCategory } from '../interfaces'
 
 @Injectable()
@@ -13,6 +14,7 @@ export class StateService {
     private stateModel: Model<State>,
     private articleService: ArticleService,
     private categoryService: CategoryService,
+    private commentService: CommentService,
   ) {}
 
   // 根据统计 每一个类别中的 所有的文章数量
@@ -45,6 +47,21 @@ export class StateService {
       tempArr = await this.articleService.findVisitsByCategoryId(allCategory[i]._id)
       result.push({ value: tempArr[0].totalVisits, name: allCategory[i].name })
     }
+    return result
+  }
+
+  // 统计每篇文章，的评论数量
+  async findTotalCommentByEveryArticle() {
+    // 获取所有文章的id
+    const allArticleId = await this.articleService.findAllArticleId()
+    const result = []
+    for (let i = 0, len = allArticleId.length; i < len; i++) {
+      const countVal = await this.commentService.countCommentNumberByArticleId(
+        allArticleId[i]._id.toString(),
+      )
+      result.push({ name: allArticleId[i].title, value: countVal })
+    }
+    // console.log('res', result)
     return result
   }
 

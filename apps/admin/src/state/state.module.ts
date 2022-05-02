@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 import { ArticleModule } from '../article/article.module'
 import { CategoryModule } from '../category/category.module'
+import { CommentModule } from '../comment/comment.module'
 import { StateController } from './state.controller'
 import { StateService } from './state.serivce'
 
@@ -10,6 +11,7 @@ import { StateService } from './state.serivce'
   imports: [
     ArticleModule,
     CategoryModule,
+    CommentModule,
     MongooseModule.forFeature([
       {
         name: State.name,
