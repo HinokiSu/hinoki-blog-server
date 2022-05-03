@@ -109,4 +109,27 @@ export class ArticlesController {
       throw new NotFoundException(`Get  article by CateId #${cateId} failed`)
     }
   }
+
+  // 分页查询
+  @Get('/pagination/:pagenum/:pagesize')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '分页查询',
+  })
+  async findArticlePagination(
+    @Res() res: any,
+    @Param('pagenum') pageNum: string,
+    @Param('pagesize') pageSize: string,
+  ) {
+    try {
+      const articles = await this.articleService.findArticleByPagination(pageNum, pageSize)
+      return res.json({
+        message: 'Article has been Found',
+        articles,
+      })
+    } catch (error) {
+      throw new NotFoundException(`Article Pagation failed`)
+    }
+  }
 }

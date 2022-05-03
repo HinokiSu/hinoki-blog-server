@@ -62,6 +62,35 @@ export class ArticlesService {
     ])
   }
 
+  // 分页查询
+  async findArticleByPagination(curPage: string, pageSize: string): Promise<any[]> {
+    return await this.articleModel.aggregate([
+      {
+        $match: {
+          isVisible: 'true',
+        },
+      },
+      {
+        $sort: {
+          _id: -1,
+        },
+      },
+      {
+        $skip: (parseInt(curPage) - 1) * parseInt(pageSize),
+      },
+      {
+        $limit: parseInt(pageSize),
+      },
+      ...commonPipeline,
+      {
+        $project: {
+          updatedAt: 0,
+          isVisible: 0,
+        },
+      },
+    ])
+  }
+
   // 获取最新的文章
   async findLatestArticle(): Promise<Article[]> {
     return await this.articleModel.aggregate([
