@@ -33,4 +33,10 @@ export class CreateCommentDto {
   @IsNotEmpty()
   @IsString()
   readonly createdAt: string
+
+  @ApiProperty({
+    example: '[]',
+    description: '子评论',
+  })
+  readonly child_comments: []
 }
