@@ -153,15 +153,6 @@ export class ArticlesService {
       return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
     }
     const reg = new RegExp(escapeRegex(keyword), 'gi')
-    /* return await this.articleModel.find(
-      {
-        title: reg,
-      },
-      {
-        updatedAt: 0,
-        isVisible: 0,
-      },
-    ) */
     return await this.articleModel.aggregate([
       {
         $match: {
@@ -179,7 +170,6 @@ export class ArticlesService {
     ])
   }
 
-  // 根据类别，获取所有文章
   /* 
     存在的问题: 
     1. 文章存在多个类别   --> 解决方案：那就重复显示文字在每个类别
@@ -190,6 +180,7 @@ export class ArticlesService {
       1. 先根据 CateId查找到 所有文章的Id --> articleIdArray
       2. 根据遍历articleIdArray，查找文章信息
   */
+  // 根据类别，获取所有文章
   async findArticlesByCateId(cateId: string) {
     return await this.articleModel.aggregate([
       {

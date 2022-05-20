@@ -7,34 +7,34 @@ import { StateModule } from '../state/state.module'
 import { UserModule } from '../user/user.module'
 import { VisitorModule } from '../visitor/visitor.module'
 
-// admin应用的主路由
+// 后台管理端, admin应用的主路由
 export const adminRoute: Routes = [
   {
-    path: 'article',
+    path: 'article', // 文章模块
     module: ArticleModule,
   },
   {
-    path: 'category',
+    path: 'category', // 类别模块
     module: CategoryModule,
   },
   {
-    path: 'user',
+    path: 'user', // 用户模块
     module: UserModule,
   },
   {
-    path: 'auth',
+    path: 'auth', // 登录认证模块
     module: AuthModule,
   },
   {
-    path: 'state',
+    path: 'state', // 可视化模块
     module: StateModule,
   },
   {
-    path: 'visitor',
+    path: 'visitor', // 访问者模块
     module: VisitorModule,
   },
   {
-    path: 'comment',
+    path: 'comment', // 评论模块
     module: CommentModule,
   },
 ]
