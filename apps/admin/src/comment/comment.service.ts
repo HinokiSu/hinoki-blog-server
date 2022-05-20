@@ -183,4 +183,23 @@ export class CommentService {
       },
     ])
   }
+
+  // 根据访问者Id删除评论(父级)
+  async removeParentCommentByVisitorId(id: string) {
+    return this.commentModel.remove({ visitor_id: id })
+  }
+
+  // 根据访问者Id删除评论(子级)
+  async removeChildCommentByVisitorId(id: string) {
+    return this.commentModel.updateMany(
+      {},
+      {
+        $pull: {
+          child_comments: {
+            visitor_id: id,
+          },
+        },
+      },
+    )
+  }
 }
