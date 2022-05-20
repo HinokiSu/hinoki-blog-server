@@ -57,7 +57,7 @@ export class VisitorController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    description: '根据id,删除visitor',
+    description: '根据id,删除visitor及其相关父子评论',
   })
   async deleteVisitorById(@Res() res: any, @Param('id') id: string) {
     try {
