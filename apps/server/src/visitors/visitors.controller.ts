@@ -3,13 +3,11 @@ import { LoginVisitorDto } from '@libs/db/dto/visitor/login-visitor.dto'
 import {
   Body,
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
   NotFoundException,
   Post,
   Res,
-  UnauthorizedException,
 } from '@nestjs/common'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import { VisitorsService } from './visitors.service'
@@ -28,9 +26,9 @@ export class VisitorsController {
   @HttpCode(HttpStatus.OK)
   async registerVisitor(@Res() res: any, @Body() visitor: CreateVisitorDto) {
     try {
-      await this.visitorsService.createVisitor(visitor)
+      const mes = await this.visitorsService.createVisitor(visitor)
       res.json({
-        message: 'vistor registered successfully',
+        message: mes,
       })
     } catch (err) {
       console.log(`[Server] Visitor Error: \n ${err}`)

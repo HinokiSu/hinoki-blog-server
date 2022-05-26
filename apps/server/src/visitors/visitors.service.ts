@@ -13,9 +13,19 @@ export class VisitorsService {
   ) {}
 
   // 创建访问者
-  async createVisitor(visitor: CreateVisitorDto) {
-    const newVisitor = new this.visitorsModel(visitor)
-    return await newVisitor.save()
+  async createVisitor(visitor: CreateVisitorDto): Promise<any> {
+    const findExistEmail = await this.judgeVisitorEmailIsExist(visitor.email)
+    const findExistNickname = await this.judgeVisitorNicknameIsExist(visitor.nickname)
+    if (findExistNickname.length > 0) {
+      return '注册使用的昵称已存在'
+    }
+    if (findExistEmail.length > 0) {
+      return '注册使用的邮箱已存在'
+    } else {
+      const newVisitor = new this.visitorsModel(visitor)
+      await newVisitor.save()
+      return ''
+    }
   }
 
   // 访问者登录
@@ -41,5 +51,27 @@ export class VisitorsService {
     } else {
       return res[0]
     }
+  }
+
+  // 判断注册的访问者邮箱是否存在
+  async judgeVisitorEmailIsExist(email: string): Promise<any[]> {
+    return this.visitorsModel.aggregate([
+      {
+        $match: {
+          email: email,
+        },
+      },
+    ])
+  }
+
+  // 判断注册的访问者的 昵称是否存在
+  async judgeVisitorNicknameIsExist(nickname: string): Promise<any[]> {
+    return this.visitorsModel.aggregate([
+      {
+        $match: {
+          nickname: nickname,
+        },
+      },
+    ])
   }
 }
